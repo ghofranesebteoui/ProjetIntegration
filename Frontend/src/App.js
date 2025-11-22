@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ForgotPassword from "./pages/forgetPass";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
+import TeacherProfile from "./pages/TeacherProfile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -34,11 +35,12 @@ function App() {
     setLoading(false);
   }, []);
 
+  // Fonction de déconnexion centralisée
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    window.location.href = "/";
+    // On ne redirige plus vers "/" mais on laisse React Router gérer
   };
 
   if (loading) {
@@ -58,72 +60,27 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {/* Barre de navigation quand connecté */}
-        {user && (
-          <nav
-            style={{
-              padding: "1rem 2rem",
-              background: "#6a1b9a",
-              color: "white",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              position: "sticky",
-              top: 0,
-              zIndex: 1000,
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h3>Bienvenue, {user.first_name || user.email}</h3>
-            <button
-              onClick={handleLogout}
-              style={{
-                background: "white",
-                color: "#6a1b9a",
-                border: "none",
-                padding: "0.6rem 1.5rem",
-                borderRadius: "12px",
-                fontWeight: "600",
-                cursor: "pointer",
-                fontSize: "1rem",
-              }}
-            >
-              Déconnexion
-            </button>
-          </nav>
-        )}
+        {/* BARRE VIOLETTE SUPPRIMÉE → propre et moderne ! */}
 
         <Routes>
-          {/* PAGE D'ACCUEIL - LandingPage */}
+          {/* Accueil */}
           <Route
             path="/"
-            element={
-              user ? (
-                <Navigate to={`/${user.role}`} replace />
-              ) : (
-                <LandingPage />
-              )
-            }
+            element={user ? <Navigate to={`/${user.role}`} replace /> : <LandingPage />}
           />
-
+<Route path="/profile" element={<TeacherProfile />} />
           {/* Login */}
           <Route
             path="/login"
-            element={
-              user ? (
-                <Navigate to={`/${user.role}`} replace />
-              ) : (
-                <LoginPage setUser={setUser} />
-              )
-            }
+            element={user ? <Navigate to={`/${user.role}`} replace /> : <LoginPage setUser={setUser} />}
           />
 
-          {/* Dashboards protégés */}
+          {/* Dashboards protégés + on passe handleLogout */}
           <Route
             path="/etudiant"
             element={
               user?.role === "etudiant" ? (
-                <StudentDashboard />
+                <StudentDashboard handleLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -134,7 +91,7 @@ function App() {
             path="/enseignant"
             element={
               user?.role === "enseignant" ? (
-                <TeacherDashboard />
+                <TeacherDashboard handleLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -145,7 +102,7 @@ function App() {
             path="/admin"
             element={
               user?.role === "admin" ? (
-                <AdminDashboard />
+                <AdminDashboard handleLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -156,19 +113,17 @@ function App() {
           <Route path="/forget-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
-
-          {/* Toute autre route → redirige intelligemment */}
+<Route 
+          path="/admin" 
+          element={<AdminDashboard handleLogout={handleLogout} />} 
+        />
+          {/* 404 */}
           <Route
             path="*"
-            element={
-              user ? (
-                <Navigate to={`/${user.role}`} replace />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
+            element={<Navigate to={user ? `/${user.role}` : "/"} replace />}
           />
         </Routes>
+        
       </div>
     </Router>
   );

@@ -14,30 +14,34 @@ const LoginPage = ({ setUser }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
 
-  // États séparés pour chaque formulaire
+  // États séparés pour les deux formulaires
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   const [showPasswordSignup, setShowPasswordSignup] = useState(false);
 
   const navigate = useNavigate();
 
+  // Redirection selon le rôle
   const redirectToDashboard = (role) => {
     if (role === 'admin') navigate('/admin');
     else if (role === 'enseignant') navigate('/enseignant');
-    else navigate('/etudiant');
+    else if (role === 'etudiant') navigate('/etudiant');
+    else navigate('/etudiant'); // par défaut
   };
 
+  // Renvoyer l'email de vérification
   const handleResendVerification = async () => {
-    const email = document.querySelector('input[name="email"]')?.value;
+    const email = document.querySelector('input[name="email"]')?.value?.trim();
     if (!email) return setError("Veuillez entrer votre email d'abord.");
 
     try {
       await axios.post('http://localhost:5000/api/auth/resend-verification', { email });
-      setError('Email de vérification renvoyé ! Vérifiez votre boîte mail.');
+      setError('Email de vérification renvoyé ! Vérifiez votre boîte de réception.');
     } catch (err) {
-      setError("Erreur lors de l'envoi de l'email");
+      setError(err.response?.data?.error || "Erreur lors du renvoi de l'email");
     }
   };
 
+  // Connexion avec Google
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -56,35 +60,40 @@ const LoginPage = ({ setUser }) => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
-      navigate(`/${userData.role}`);
+      redirectToDashboard(userData.role);
     } catch (error) {
       console.error('Erreur Google login:', error);
       setError('Erreur lors de la connexion avec Google.');
     }
   };
 
+  // Connexion classique
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
+
     const formData = new FormData(e.target);
-    const cred = {
-      email: formData.get('email').trim(),
+    const credentials = {
+      email: formData.get('email')?.trim(),
       password: formData.get('password'),
     };
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', cred);
-      const { token, user } = res.data.data.data;
+      const res = await axios.post('http://localhost:5000/api/auth/login', credentials);
+
+      // CORRECTION PRINCIPALE : .data.data (pas .data.data.data)
+      const { token, user } = res.data.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
-      setError('');
+
       redirectToDashboard(user.role);
     } catch (err) {
       if (err.response?.data?.needsVerification) {
         setError(
           <div style={{ textAlign: 'center' }}>
-            {err.response.data.error}
+            {err.response.data.error || "Veuillez vérifier votre email avant de vous connecter."}
             <button
               type="button"
               onClick={handleResendVerification}
@@ -95,7 +104,7 @@ const LoginPage = ({ setUser }) => {
                 color: '#7c3aed',
                 textDecoration: 'underline',
                 cursor: 'pointer',
-                fontWeight: '600'
+                fontWeight: '600',
               }}
             >
               Renvoyer l'email
@@ -108,30 +117,36 @@ const LoginPage = ({ setUser }) => {
     }
   };
 
+  // Inscription
   const handleRegister = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    setError('');
 
+    const formData = new FormData(e.target);
     const data = {
-      first_name: formData.get('first_name').trim(),
-      last_name: formData.get('last_name').trim(),
-      email: formData.get('email').trim(),
+      first_name: formData.get('first_name')?.trim(),
+      last_name: formData.get('last_name')?.trim(),
+      email: formData.get('email')?.trim(),
       password: formData.get('password'),
       role: formData.get('role'),
     };
 
     if (data.password !== formData.get('confirm_password')) {
-      setError('Les mots de passe ne correspondent pas');
-      return;
+      return setError('Les mots de passe ne correspondent pas');
     }
 
     try {
       await axios.post('http://localhost:5000/api/auth/register', data);
-      setError('');
-      Swal.fire('Succès', 'Inscription réussie ! Un email de vérification a été envoyé.', 'success');
+      Swal.fire({
+        icon: 'success',
+        title: 'Inscription réussie !',
+        text: 'Un email de vérification vous a été envoyé.',
+        confirmButtonColor: '#7c3aed',
+      });
       setIsSignUp(false);
+      setError('');
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de l\'inscription');
+      setError(err.response?.data?.error || "Erreur lors de l'inscription");
     }
   };
 
@@ -163,13 +178,16 @@ const LoginPage = ({ setUser }) => {
               <h2>Bienvenue !</h2>
               <p className="subtitle">Connectez-vous pour continuer votre apprentissage</p>
 
-              {error && <p className="error">{error}</p>}
-
+{error && (
+  <div className="error">
+    {typeof error === 'string' ? error : error}
+  </div>
+)}
               <form onSubmit={handleLogin}>
-                <input type="email" name="email" placeholder="Email" required />
+                <input type="email" name="email" placeholder="Email" required autoFocus />
 
-                {/* Mot de passe avec œil */}
                 <div className="input-group">
+                  <label>Mot de passe</label>
                   <div className="password-wrapper">
                     <input
                       type={showPasswordLogin ? 'text' : 'password'}
@@ -188,7 +206,6 @@ const LoginPage = ({ setUser }) => {
                 </div>
 
                 <div className="options">
-                  
                   <Link to="/forget-password" className="link">
                     Mot de passe oublié ?
                   </Link>
@@ -208,7 +225,6 @@ const LoginPage = ({ setUser }) => {
               <p className="switch-text">
                 Pas encore de compte ?{' '}
                 <span
-                
                   onClick={() => {
                     setIsSignUp(true);
                     setError('');
@@ -230,9 +246,7 @@ const LoginPage = ({ setUser }) => {
               <div className="hero-content">
                 <HiAcademicCap className="big-icon" />
                 <h1>Reprenez là où vous vous êtes arrêté</h1>
-                <p>
-                  Divers cours, une communauté active, et un apprentissage avec des méthodes modernes.
-                </p>
+                <p>Divers cours, une communauté active, et un apprentissage moderne.</p>
               </div>
             </motion.div>
           </motion.div>
@@ -254,7 +268,7 @@ const LoginPage = ({ setUser }) => {
               <div className="hero-content">
                 <HiAcademicCap className="big-icon" />
                 <h1>Rejoignez eduNova aujourd'hui</h1>
-                <p>Créez votre compte rapidement et commencez à apprendre.</p>
+                <p>Créez votre compte en quelques secondes.</p>
               </div>
             </motion.div>
 
@@ -273,8 +287,11 @@ const LoginPage = ({ setUser }) => {
 
               <h2>Créer un compte</h2>
 
-              {error && <p className="error">{error}</p>}
-
+{error && (
+  <div className="error">
+    {typeof error === 'string' ? error : error}
+  </div>
+)}
               <form onSubmit={handleRegister}>
                 <div className="name-row">
                   <input type="text" name="first_name" placeholder="Prénom" required />
@@ -290,6 +307,7 @@ const LoginPage = ({ setUser }) => {
                       type={showPasswordSignup ? 'text' : 'password'}
                       name="password"
                       placeholder="Minimum 6 caractères"
+                      minLength="6"
                       required
                     />
                     <button
@@ -321,8 +339,8 @@ const LoginPage = ({ setUser }) => {
                   </div>
                 </div>
 
-                <select name="role" required>
-                  <option value="">Choisir votre rôle</option>
+                <select name="role" required defaultValue="">
+                  <option value="" disabled>Choisir votre rôle</option>
                   <option value="etudiant">Étudiant</option>
                   <option value="enseignant">Enseignant</option>
                 </select>

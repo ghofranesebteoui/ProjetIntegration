@@ -13,9 +13,10 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // ----------------- INSCRIPTION -----------------
+// ----------------- INSCRIPTION -----------------
 const register = async (req, res) => {
   try {
-    console.log("📝 Tentative d'inscription:", req.body.email);
+    console.log("Tentative d'inscription:", req.body.email);
 
     const { email, password, first_name, last_name, role } = req.body;
 
@@ -34,24 +35,32 @@ const register = async (req, res) => {
       });
     }
 
+    // Autoriser le rôle admin (et tout autre rôle)
+    const allowedRoles = ['etudiant', 'enseignant', 'admin'];
+    const userRole = role && allowedRoles.includes(role) ? role : 'etudiant';
+
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
-      console.log("❌ Email déjà existant:", email);
+      console.log("Email déjà existant:", email);
       return res.status(400).json({
         success: false,
         error: "Un utilisateur avec cet email existe déjà",
       });
     }
 
+    // HASHAGE DU MOT DE PASSE ICI
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       email,
-      password,
+      password_hash: hashedPassword,  // ON UTILISE password_hash
       first_name,
       last_name,
-      role: role || "etudiant",
+      role: userRole,
+      is_verified: false,
     });
 
-    console.log("✅ Utilisateur créé:", user.id);
+    console.log("Utilisateur créé:", user.id, "Rôle:", user.role);
 
     const verificationToken = generateVerificationToken();
     await user.saveVerificationToken(verificationToken);
@@ -69,7 +78,7 @@ const register = async (req, res) => {
             </div>`,
     });
 
-    console.log("📧 Email de vérification envoyé à:", user.email);
+    console.log("Email de vérification envoyé à:", user.email);
 
     res.status(201).json({
       success: true,
@@ -77,7 +86,7 @@ const register = async (req, res) => {
       data: { user: user.toJSON() },
     });
   } catch (error) {
-    console.error("❌ Erreur inscription:", error);
+    console.error("Erreur inscription:", error);
     res.status(500).json({
       success: false,
       error: "Erreur lors de l'inscription",

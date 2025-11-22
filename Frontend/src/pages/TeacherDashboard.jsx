@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   HiMenu,
   HiHome,
@@ -22,14 +23,49 @@ import {
 } from "react-icons/hi";
 import "./dashboard.css";
 
-export default function TeacherDashboard() {
+export default function TeacherDashboard({ handleLogout = () => {} }) {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState("home");
+  const [user, setUser] = useState(null);
+
+  const logoutAndRedirect = () => {
+    handleLogout();
+    navigate("/login");
+  };
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleProfileMenu = () => setProfileMenuOpen(!profileMenuOpen);
 
+  // Fermer le menu profil en cliquant ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const profileMenu = document.querySelector(".header-user-menu");
+      if (profileMenu && !profileMenu.contains(event.target)) {
+        setProfileMenuOpen(false);
+      }
+    };
+
+    if (profileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [profileMenuOpen]);
+
+  // Charger l'utilisateur depuis localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Erreur parsing utilisateur:", error);
+      }
+    }
+  }, []);
+
+  // Touche Escape
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
@@ -42,19 +78,28 @@ export default function TeacherDashboard() {
   }, []);
 
   const teacherData = {
-    name: "Dr. Marie Martin",
-    email: "marie.martin@edunova.tn",
     totalCourses: 8,
     totalStudents: 245,
     totalResources: 67,
     pendingEvaluations: 12,
   };
 
-  const initials = teacherData.name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
+  const getInitials = () => {
+    if (!user) return "DM";
+    const firstName = user.first_name || "";
+    const lastName = user.last_name || "";
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  const getFullName = () => {
+    if (!user) return "Dr. Marie Martin";
+    return `${user.first_name || ""} ${user.last_name || ""}`.trim();
+  };
+
+  const getEmail = () => {
+    if (!user) return "marie.martin@edunova.tn";
+    return user.email || "";
+  };
 
   const courses = [
     { id: 1, title: "Introduction au Développement Web", students: 45, resources: 12, pendingAssignments: 8, completionRate: 68, lastUpdated: "Hier" },
@@ -100,9 +145,11 @@ export default function TeacherDashboard() {
       {/* SIDEBAR GAUCHE */}
       <aside className={`sidebar-drawer ${sidebarOpen ? "sidebar-open" : ""}`}>
         <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <HiBookOpen className="sidebar-logo-icon" />
-            <span className="sidebar-logo-text">eduNova</span>
+          <div className="logo">
+            <div className="edunova-icon">
+              <HiAcademicCap />
+            </div>
+            <span className="edunova-text">eduNova</span>
           </div>
           <button className="sidebar-close-btn" onClick={toggleSidebar}>
             <HiX />
@@ -128,7 +175,6 @@ export default function TeacherDashboard() {
           })}
         </nav>
 
-        {/* ACTIONS RAPIDES */}
         <div className="sidebar-quick-actions">
           <div className="sidebar-section-title">Actions rapides</div>
           <button className="sidebar-nav-item">
@@ -146,7 +192,7 @@ export default function TeacherDashboard() {
         </div>
 
         <div className="sidebar-footer">
-          <button className="sidebar-nav-item logout-item">
+          <button className="sidebar-nav-item logout-item" onClick={logoutAndRedirect}>
             <HiLogout className="sidebar-nav-icon" />
             <span>Déconnexion</span>
           </button>
@@ -160,11 +206,11 @@ export default function TeacherDashboard() {
             <button className="menu-toggle-btn" onClick={toggleSidebar}>
               <HiMenu />
             </button>
-            <div className="header-logo">
-              <div className="header-logo-icon">
-                <HiBookOpen />
+            <div className="logo">
+              <div className="edunova-icon">
+                <HiAcademicCap />
               </div>
-              <span className="header-logo-text">eduNova</span>
+              <span className="edunova-text">eduNova</span>
             </div>
           </div>
 
@@ -177,28 +223,34 @@ export default function TeacherDashboard() {
               <span className="header-notification-badge">{teacherData.pendingEvaluations}</span>
             </button>
 
-            {/* MENU PROFIL IDENTIQUE À L'ÉTUDIANT */}
             <div className="header-user-menu">
               <div className="header-user-avatar" onClick={toggleProfileMenu}>
                 <HiUser className="avatar-icon" />
-                <span className="avatar-initials">{initials}</span>
+                <span className="avatar-initials">{getInitials()}</span>
               </div>
 
               {profileMenuOpen && (
                 <div className="header-profile-dropdown">
                   <div className="profile-dropdown-header">
-                    <div className="profile-dropdown-avatar">{initials}</div>
+                    <div className="profile-dropdown-avatar">{getInitials()}</div>
                     <div>
-                      <p className="profile-dropdown-name">{teacherData.name}</p>
-                      <p className="profile-dropdown-email">{teacherData.email}</p>
+                      <p className="profile-dropdown-name">{getFullName()}</p>
+                      <p className="profile-dropdown-email">{getEmail()}</p>
                     </div>
                   </div>
                   <div className="profile-dropdown-divider" />
-                  <button className="profile-dropdown-item">
-                    <HiUser /> Mon Profil
+                  <button
+                    className="profile-dropdown-item"
+                    onClick={() => {
+                      setProfileMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                  >
+                    <HiUser className="dropdown-icon" />
+                    Mon Profil
                   </button>
                   <div className="profile-dropdown-divider" />
-                  <button className="profile-dropdown-item logout-item">
+                  <button className="profile-dropdown-item logout-item" onClick={logoutAndRedirect}>
                     <HiLogout /> Déconnexion
                   </button>
                 </div>
@@ -214,8 +266,8 @@ export default function TeacherDashboard() {
           <div className="page-header">
             <h1 className="page-main-title">Tableau de bord Enseignant</h1>
             <p className="page-main-subtitle">
-              Bienvenue, {teacherData.name} • Gérez vos cours et suivez vos étudiants
-            </p>
+  Bienvenue, <span style={{ fontWeight: 'bold' }}>{getFullName()}</span> ! Continuez votre progression
+</p>
           </div>
 
           {/* STATISTIQUES */}
@@ -265,24 +317,56 @@ export default function TeacherDashboard() {
                   </div>
                   <button className="student-primary-btn">Créer un cours</button>
                 </div>
+
                 <div className="student-courses-list">
                   {courses.map((course) => (
                     <div key={course.id} className="student-course-card">
                       <div className="course-card-icon">
                         <HiFolder />
                       </div>
+
                       <div className="course-card-details">
                         <h3 className="course-card-title">{course.title}</h3>
                         <p className="course-card-meta">
                           {course.students} étudiants • {course.resources} ressources • {course.pendingAssignments} devoirs en attente
                         </p>
+
                         <div className="course-card-progress-bar">
-                          <div className="course-progress-fill" style={{ width: `${course.completionRate}%` }} />
+                          <div
+                            className="course-progress-fill"
+                            style={{ width: `${course.completionRate}%` }}
+                          />
                         </div>
+
                         <div className="course-card-tags">
-                          <span className="course-tag">Taux : {course.completionRate}%</span>
+                          <span className="course-tag">Taux moyen : {course.completionRate}%</span>
                           <span className="course-tag">{course.lastUpdated}</span>
                         </div>
+                      </div>
+
+                      {/* CERCLE DE PROGRESSION À DROITE */}
+                      <div className="course-card-progress-circle">
+                        <svg width="68" height="68" viewBox="0 0 68 68">
+                          <circle cx="34" cy="34" r="30" fill="none" stroke="#e0e0e0" strokeWidth="6" />
+                          <circle
+                            cx="34"
+                            cy="34"
+                            r="30"
+                            fill="none"
+                            stroke="url(#gradient)"
+                            strokeWidth="6"
+                            strokeDasharray={`${course.completionRate * 1.88} 188`}
+                            strokeLinecap="round"
+                            transform="rotate(-90 34 34)"
+                          />
+                          <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#7c3aed" />
+                              <stop offset="100%" stopColor="#5b21b6" />
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                        <span className="progress-circle-text">{course.completionRate}%</span>
                       </div>
                     </div>
                   ))}
@@ -371,8 +455,8 @@ export default function TeacherDashboard() {
                   {recentActivity.map((a, i) => (
                     <div key={i} className="student-activity-item">
                       <div className="activity-item-icon">
-                        {a.action.includes("devoir") ? <HiDocumentText /> : 
-                         a.action.includes("Question") ? <HiQuestionMarkCircle /> : 
+                        {a.action.includes("devoir") ? <HiDocumentText /> :
+                         a.action.includes("Question") ? <HiQuestionMarkCircle /> :
                          <HiCheckCircle />}
                       </div>
                       <div className="activity-item-details">

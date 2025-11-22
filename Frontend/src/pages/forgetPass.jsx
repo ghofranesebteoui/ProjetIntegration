@@ -12,7 +12,10 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+// Fonction pour aller à la landing page
+  const goToHome = () => {
+    navigate('/'); // ou '/home' selon ta route
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -49,7 +52,18 @@ const ForgotPassword = () => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <div className="login-form">
-            <div className="logo">
+            <div 
+              className="logo" 
+              onClick={goToHome}
+              style={{ cursor: 'pointer' }} // indique visuellement que c'est cliquable
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  goToHome();
+                }
+              }}
+            >
                             <HiAcademicCap className="logo-icon" />
                             <h1>eduNova</h1>
                           </div>

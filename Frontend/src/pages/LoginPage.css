@@ -177,6 +177,7 @@
   cursor: pointer;
   transition: all 0.4s;
   box-shadow: 0 10px 30px rgba(124,62,237,0.35);
+  margin-left: 50px;
 }
 
 .btn-primary:hover {

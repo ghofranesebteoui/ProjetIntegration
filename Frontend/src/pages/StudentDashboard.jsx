@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   HiMenu,
   HiHome,
@@ -18,17 +19,51 @@ import {
   HiCog,
   HiX,
   HiDocumentText,
+  HiAcademicCap,
   HiClock,
+  HiBeaker,
 } from "react-icons/hi";
 import "./dashboard.css";
 
-export default function StudentDashboard() {
+export default function StudentDashboard({ handleLogout }) {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState("home");
+  const [user, setUser] = useState(null);
 
+
+  const logoutAndRedirect = () => {
+    handleLogout();
+    navigate("/login");
+  };
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleProfileMenu = () => setProfileMenuOpen(!profileMenuOpen);
+  // Fermer le menu profil en cliquant ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const profileMenu = document.querySelector(".header-user-menu");
+      if (profileMenu && !profileMenu.contains(event.target)) {
+        setProfileMenuOpen(false);
+      }
+    };
+
+    if (profileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [profileMenuOpen]);
+// Charger l'utilisateur depuis localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Erreur parsing utilisateur:", error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -50,11 +85,22 @@ export default function StudentDashboard() {
     averageGrade: 15.8,
   };
 
-  const initials = studentData.name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
+  const getInitials = () => {
+    if (!user) return "DM";
+    const firstName = user.first_name || "";
+    const lastName = user.last_name || "";
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  const getFullName = () => {
+    if (!user) return "Dr. Marie Martin";
+    return `${user.first_name || ""} ${user.last_name || ""}`.trim();
+  };
+
+  const getEmail = () => {
+    if (!user) return "marie.martin@edunova.tn";
+    return user.email || "";
+  };
 
   const courses = [
     { id: 1, title: "Introduction au Développement Web", progress: 82, modules: "10/12", category: "Informatique", level: "Débutant", instructor: "Dr. Martin" },
@@ -97,10 +143,12 @@ export default function StudentDashboard() {
       {/* SIDEBAR GAUCHE */}
       <aside className={`sidebar-drawer ${sidebarOpen ? "sidebar-open" : ""}`}>
         <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <HiBookOpen className="sidebar-logo-icon" />
-            <span className="sidebar-logo-text">eduNova</span>
-          </div>
+          <div className="logo">
+  <div className="edunova-icon">
+    <HiAcademicCap />
+  </div>
+  <span className="edunova-text">eduNova</span>
+</div>
           <button className="sidebar-close-btn" onClick={toggleSidebar}>
             <HiX />
           </button>
@@ -139,7 +187,7 @@ export default function StudentDashboard() {
         </div>
 
         <div className="sidebar-footer">
-          <button className="sidebar-nav-item logout-item">
+          <button className="sidebar-nav-item logout-item" onClick={logoutAndRedirect}>
             <HiLogout className="sidebar-nav-icon" />
             <span>Déconnexion</span>
           </button>
@@ -150,16 +198,16 @@ export default function StudentDashboard() {
       <header className="student-header">
         <div className="header-content">
           <div className="header-left">
-            <button className="menu-toggle-btn" onClick={toggleSidebar}>
-              <HiMenu />
-            </button>
-            <div className="header-logo">
-              <div className="header-logo-icon">
-                <HiBookOpen />
-              </div>
-              <span className="header-logo-text">eduNova</span>
-            </div>
-          </div>
+  <button className="menu-toggle-btn" onClick={toggleSidebar}>
+    <HiMenu />
+  </button>
+  <div className="logo">
+    <div className="edunova-icon">
+      <HiAcademicCap />   {/* ou garde HiBookOpen si tu préfères */}
+    </div>
+    <span className="edunova-text">eduNova</span>
+  </div>
+</div>
 
           <div className="header-actions">
             <button className="header-icon-btn">
@@ -173,16 +221,16 @@ export default function StudentDashboard() {
             <div className="header-user-menu">
               <div className="header-user-avatar" onClick={toggleProfileMenu}>
                 <HiUser className="avatar-icon" />
-                <span className="avatar-initials">{initials}</span>
+                <span className="avatar-initials">{getInitials()}</span>
               </div>
 
               {profileMenuOpen && (
                 <div className="header-profile-dropdown">
                   <div className="profile-dropdown-header">
-                    <div className="profile-dropdown-avatar">{initials}</div>
+                    <div className="profile-dropdown-avatar">{getInitials()}</div>
                     <div>
-                      <p className="profile-dropdown-name">{studentData.name}</p>
-                      <p className="profile-dropdown-email">{studentData.email}</p>
+                      <p className="profile-dropdown-name">{getFullName()}</p>
+                      <p className="profile-dropdown-email">{getEmail()}</p>
                     </div>
                   </div>
                   <div className="profile-dropdown-divider"></div>
@@ -190,7 +238,7 @@ export default function StudentDashboard() {
                     <HiUser /> Mon Profil
                   </button>
                   <div className="profile-dropdown-divider"></div>
-                  <button className="profile-dropdown-item logout-item">
+                  <button className="profile-dropdown-item logout-item" onClick={logoutAndRedirect}>
                     <HiLogout /> Déconnexion
                   </button>
                 </div>
@@ -205,7 +253,9 @@ export default function StudentDashboard() {
         <div className="student-container">
           <div className="page-header">
             <h1 className="page-main-title">Tableau de bord Étudiant</h1>
-            <p className="page-main-subtitle">Bienvenue, {studentData.name} ! Continuez votre progression</p>
+              <p className="page-main-subtitle">
+              Bienvenue, <span style={{ fontWeight: 'bold' }}>{getFullName()}</span> ! Continuez votre progression
+              </p>          
           </div>
 
           {/* STATISTICS */}
@@ -287,7 +337,7 @@ export default function StudentDashboard() {
                             cy="30"
                             r="26"
                             fill="none"
-                            stroke="#9c27b0"
+                            stroke="#7c3aed"
                             strokeWidth="4"
                             strokeDasharray={`${course.progress * 1.63} 163`}
                             strokeLinecap="round"
@@ -335,8 +385,14 @@ export default function StudentDashboard() {
                   {UPCOMING_EVENTS.map((event, i) => (
                     <div key={i} className="student-event-item">
                       <div className={`event-type-badge ${event.type}`}>
-                        {event.type === "exam" ? "Examen" : event.type === "assignment" ? "Rendu" : "TP"}
-                      </div>
+  {event.type === "exam" ? (
+    <HiClipboardList />
+  ) : event.type === "assignment" ? (
+    <HiDocumentText />
+  ) : (
+    <HiBeaker />
+  )}
+</div>
                       <div className="event-item-content">
                         <p className="event-item-title">{event.title}</p>
                         <p className="event-item-date">

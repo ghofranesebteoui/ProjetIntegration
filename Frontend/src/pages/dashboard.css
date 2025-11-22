@@ -68,13 +68,13 @@
 
 .sidebar-logo-icon {
   font-size: 2rem;
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 .sidebar-logo-text {
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -92,6 +92,7 @@
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-bottom: 25px;
 }
 
 .sidebar-close-btn:hover {
@@ -127,11 +128,11 @@
 
 .sidebar-nav-item:hover {
   background: #f8f5fb;
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 .sidebar-nav-item.active {
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: white;
   box-shadow: 0 4px 12px rgba(106, 27, 154, 0.3);
 }
@@ -178,12 +179,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-left: -70px;
+  margin-top: 20px;
 }
 
 .menu-toggle-btn {
@@ -199,10 +203,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   color: #333;
+  margin-top: -30px;
 }
 
 .menu-toggle-btn:hover {
-  background: #9c27b0;
+  background: #7c3aed;
   color: white;
   transform: scale(1.05);
 }
@@ -239,6 +244,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-right: -50px;
 }
 
 .header-icon-btn {
@@ -260,14 +266,14 @@
 .header-icon-btn:hover {
   background: #e8e8e8;
   transform: translateY(-2px);
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 .header-notification-btn .header-notification-badge {
   position: absolute;
   top: -4px;
   right: -4px;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: white;
   font-size: 0.7rem;
   padding: 3px 7px;
@@ -285,7 +291,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.875rem;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -315,7 +321,7 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
-  width: 260px;
+  width: 350px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   z-index: 999;
   animation: slideDown 0.3s ease;
@@ -342,7 +348,7 @@
 .profile-dropdown-avatar {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -388,7 +394,7 @@
 
 .profile-dropdown-item:hover {
   background: #f5f5f5;
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 .profile-dropdown-item.logout-item {
@@ -455,7 +461,7 @@
 .student-stat-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-color: #9c27b0;
+  border-color: #7c3aed;
 }
 
 .student-highlight-card {
@@ -478,7 +484,7 @@
 
 .stat-card-icon {
   font-size: 1.8rem;
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 .student-highlight-card .stat-card-icon {
@@ -548,7 +554,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -556,12 +562,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(106, 27, 154, 0.3);
   white-space: nowrap;
 }
 
 .student-primary-btn:hover {
-  background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(106, 27, 154, 0.4);
 }
@@ -588,7 +593,7 @@
 }
 
 .student-course-card:hover {
-  border-color: #9c27b0;
+  border-color: #7c3aed;
   box-shadow: 0 6px 20px rgba(106, 27, 154, 0.15);
   transform: translateX(4px);
 }
@@ -596,7 +601,7 @@
 .course-card-icon {
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -635,7 +640,7 @@
 
 .course-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(90deg, #7c3aed, #5b21b6);
   border-radius: 12px;
   transition: width 0.5s ease;
 }
@@ -675,7 +680,7 @@
   transform: translate(-50%, -50%);
   font-size: 0.95rem;
   font-weight: 700;
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 /* ===================================
@@ -705,7 +710,7 @@
 .activity-item-icon {
   width: 42px;
   height: 42px;
-  background: #9c27b0;
+  background: #7c3aed;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -771,7 +776,7 @@
 
 .sidebar-title-icon {
   font-size: 1.4rem;
-  color: #9c27b0;
+  color: #7c3aed;
 }
 
 /* ===================================
@@ -872,7 +877,7 @@
 .message-item-avatar {
   width: 42px;
   height: 42px;
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -938,8 +943,8 @@
 
 .quick-action-btn:hover {
   background: #f8f5fb;
-  border-color: #9c27b0;
-  color: #9c27b0;
+  border-color: #7c3aed;
+  color: #7c3aed;
   transform: translateX(4px);
 }
 
@@ -1025,4 +1030,87 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #999;
+}
+/* ===================================
+   LOGO EDU NOVA – EXACTEMENT COMME TA PHOTO
+=================================== */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;                  /* espace parfait entre icône et texte */
+  text-decoration: none;
+  margin-left: -10px;
+  margin-top: 10px;
+}
+
+.edunova-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.35);
+  flex-shrink: 0;
+}
+
+.edunova-icon svg {
+  color: white;
+  font-size: 32px;
+}
+
+/* Texte eduNova – couleur exacte de ta photo */
+.edunova-txt {
+  font-size: 28px;
+  font-weight: 750;
+  color: #1E1B4B;              /* bleu très foncé comme dans l’image */
+  letter-spacing: -0.5px;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Un peu plus petit dans le header (mobile + élégance) */
+.header-left .logo {
+  gap: 12px;
+  margin-left: -5px;
+  margin-top: -0px;
+}
+
+.header-left .edunova-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+}
+
+.header-left .edunova-icon svg {
+  font-size: 28px;
+}
+
+.header-left .edunova-txt {
+  font-size: 26px;
+}
+
+/* Responsive – tablette & mobile */
+@media (max-width: 1024px) {
+  .edunova-icon { width: 48px; height: 48px; }
+  .edunova-icon svg { font-size: 29px; }
+  .edunova-txt { font-size: 26px; }
+}
+
+@media (max-width: 768px) {
+  .header-left .edunova-txt {
+    font-size: 24px;
+  }
+  .header-left .edunova-icon {
+    width: 42px;
+    height: 42px;
+  }
+  .header-left .edunova-icon svg {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edunova-txt { font-size: 24px; }
 }

@@ -1,5 +1,17 @@
 import { motion } from 'framer-motion';
-import { HiAcademicCap, HiBookOpen, HiUsers, HiChartBar, HiLightningBolt, HiShieldCheck, HiPlay, HiCheckCircle, HiArrowRight } from 'react-icons/hi';
+import { 
+  HiAcademicCap, 
+  HiQuestionMarkCircle, 
+  HiStar,               // ← espace après la virgule
+  HiBookOpen, 
+  HiUsers, 
+  HiChartBar, 
+  HiLightningBolt, 
+  HiShieldCheck, 
+  HiPlay, 
+  HiCheckCircle, 
+  HiArrowRight 
+} from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
 
@@ -45,7 +57,45 @@ const Index = () => {
     "Espace dédié aux étudiants et formateurs",
     "Apprentissage à votre rythme"
   ];
+   const testimonials = [
+    {
+      name: "Ahmed Ben Ali",
+      role: "Étudiant en Informatique",
+      text: "EduNova m'a permis de progresser rapidement en développement. Les cours sont clairs et les enseignants très réactifs.",
+      avatar: "AB",
+    },
+    {
+      name: "Dr. Nadia Khemiri",
+      role: "Enseignante en IA",
+      text: "La plateforme est très intuitive. Je peux facilement créer mes contenus et suivre la progression de mes étudiants.",
+      avatar: "NK",
+    },
+    {
+      name: "Sarah Trabelsi",
+      role: "Étudiante en Design",
+      text: "J'aime la flexibilité d'apprendre à mon rythme. EduNova a transformé mon apprentissage.",
+      avatar: "ST",
+    },
+  ]
 
+  const faqs = [
+  {
+    question: "La plateforme est-elle gratuite ?",
+    answer: "Oui, eduNova est 100 % gratuite pour tous les apprenants. Accédez à l’ensemble des cours sans aucun frais.",
+  },
+  {
+    question: "Tous les cours sont-ils accessibles immédiatement ?",
+    answer: "Absolument ! Dès votre inscription, vous avez un accès illimité et instantané à tous les cours disponibles.",
+  },
+  {
+    question: "Comment puis-je m’inscrire à un cours ?",
+    answer: "Créez un compte, naviguez vers le catalogue des cours et inscrivez-vous avec un seul clic.",
+  },
+  {
+    question: "Les cours sont-ils accessibles hors ligne ?",
+    answer: "Vous pouvez télécharger les ressources (PDF, vidéos, exercices) pour les consulter hors ligne.",
+  },
+];
   return (
     <div className="landing-page">
       {/* HEADER / NAVBAR */}
@@ -58,28 +108,30 @@ const Index = () => {
   <div className="header-container">
     <div className="header-content">
 
-      {/* LOGO A GAUCHE */}
-      <Link to="/" className="header-logo-link">
-        <div className="header-logo-box">
-          <HiAcademicCap className="header-logo-icon" />
-        </div>
-        <span className="header-logo-text">eduNova</span>
-      </Link>
+      {/* LOGO */}
+{/* LOGO IDENTIQUE À CELUI DU DASHBOARD */}
+<Link to="/" className="logo-landingPage">
+  <div className="edunova-icon">
+    <HiAcademicCap />
+  </div>
+  <span className="edunova-text">eduNova</span>
+</Link>
 
-      {/* NAV AU CENTRE */}
-      <nav className="header-nav">
-        <a href="#features" className="nav-link larger-text">Fonctionnalités</a>
-        <a href="#pricing" className="nav-link larger-text">Pourquoi nous choisir</a>
-        <a href="#stats" className="nav-link larger-text">À propos</a>
-      </nav>
+{/* NAVIGATION */}
+<nav className="header-nav">
+  <a href="#features" className="nav-link">Fonctionnalités</a>
+  <a href="#testimonials" className="nav-link">Témoignages</a>
+  <a href="#faq" className="nav-link">Questions fréquentes</a>
+  <a href="#pricing" className="nav-link">Pourquoi nous choisir</a>
+  <a href="#stats" className="nav-link">À propos</a>
+</nav>
 
-      {/* ACTIONS A DROITE */}
-      <div className="header-actions">
-        <Link to="/login">
-          <button className="btn-primary">Se connecter</button>
-        </Link>
-      </div>
-
+{/* BOUTONS */}
+<div className="header-actions">
+  <Link to="/login">
+    <button className="header-login-btn">Se connecter</button>
+  </Link>
+</div>
     </div>
   </div>
 </motion.header>
@@ -223,6 +275,73 @@ const Index = () => {
           </div>
         </div>
       </section>
+       {/* TESTIMONIALS */}
+      <section id="testimonials" className="py-20 px-4 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <motion.div className="text-center mb-16" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Ce que disent nos utilisateurs</h2>
+            <p className="text-xl text-gray-600">Découvrez les expériences de nos apprenants satisfaits</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                className="bg-white p-8 rounded-xl border border-gray-200 hover:shadow-lg transition-all"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <HiStar key={i} className="text-yellow-400 fill-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="avatar-circle">
+  {testimonial.avatar}
+</div>
+                  <div>
+                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-20 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <motion.div className="text-center mb-16" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Questions fréquentes</h2>
+            <p className="text-xl text-gray-600">Trouvez les réponses à vos questions</p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <motion.details
+                key={idx}
+                className="group border border-gray-200 rounded-lg p-6 hover:border-violet-600 transition-all cursor-pointer"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
+              >
+                <summary className="flex items-center justify-between font-semibold text-gray-900 select-none">
+                  <span className="flex items-center gap-3">
+                    <HiQuestionMarkCircle className="text-violet-600" />
+                    {faq.question}
+                  </span>
+                </summary>
+                <p className="mt-4 text-gray-600 pl-8">{faq.answer}</p>
+              </motion.details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA SECTION */}
       <section id="pricing" className="cta-section">
@@ -257,7 +376,7 @@ const Index = () => {
                 <div className="pricing-action">
                   <Link to="/login">
                     <button className="btn-cta">
-                      Découvrir la plateforme →
+                      Découvrir la plateforme 
                       <HiArrowRight className="btn-icon" />
                     </button>
                   </Link>
@@ -274,11 +393,18 @@ const Index = () => {
           <div className="footer-grid">
             <div className="footer-brand">
               <div className="footer-logo">
-                <HiAcademicCap className="footer-logo-icon" />
-                <span className="footer-logo-text">eduNova</span>
-              </div>
+  <div className="edunova-icon">
+    <HiAcademicCap />
+  </div>
+  <span className="edunova-text" style={{ 
+    background: 'linear-gradient(135deg, #ffffff, #f0f0ff)', 
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  }}>eduNova</span>
+</div>
               <p className="footer-tagline">
-                La plateforme d'apprentissage en ligne nouvelle génération
+                La plateforme d'apprentissage en ligne de la nouvelle génération
               </p>
             </div>
 
@@ -287,7 +413,7 @@ const Index = () => {
               <ul className="footer-list">
                 <li><a href="#" className="footer-link">Cours</a></li>
                 <li><a href="#" className="footer-link">Enseignants</a></li>
-                <li><a href="#" className="footer-link">Communauté</a></li>
+                <li><a href="#" className="footer-link">Étudiants</a></li>
               </ul>
             </div>
 
