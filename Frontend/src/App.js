@@ -6,15 +6,42 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import LandingPage from "./pages/LandingPage";  
-import LoginPage from "./pages/LoginPage";
-import StudentDashboard from "./pages/StudentDashboard";
-import TeacherDashboard from "./pages/TeacherDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-import ForgotPassword from "./pages/forgetPass";
-import ResetPassword from "./pages/ResetPassword";
-import VerifyEmail from "./pages/VerifyEmail";
-import TeacherProfile from "./pages/TeacherProfile";
+// Auth pages
+import LandingPage from "./pages/shared/LandingPage";
+import LoginPage from "./pages/auth/LoginPage";
+import ForgotPassword from "./pages/auth/forgetPass";
+import ResetPassword from "./pages/auth/ResetPassword";
+import VerifyEmail from "./pages/auth/VerifyEmail";
+
+// Student pages
+import StudentDashboard from "./pages/student/StudentDashboard";
+import StudentProfile from "./pages/student/StudentProfile";
+
+// Teacher pages
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherProfile from "./pages/teacher/TeacherProfile";
+import TeacherCourseDetail from "./pages/teacher/TeacherCourseDetail";
+import TeacherAssignments from "./pages/teacher/TeacherAssignments";
+import TeacherAssignmentDetail from "./pages/teacher/TeacherAssignmentDetail";
+import TeacherAssignmentCreate from "./pages/teacher/TeacherAssignmentCreate";
+import CreateQuiz from "./pages/teacher/CreateQuiz";
+import QuizResults from "./pages/teacher/QuizResults";
+import TeacherPlanning from "./pages/teacher/TeacherPlanning";
+import TeacherQuestions from "./pages/teacher/TeacherQuestions";
+import TeacherResources from "./pages/teacher/TeacherResources";
+import TeacherMessaging from "./pages/teacher/TeacherMessaging";
+import TeacherNotifications from "./pages/teacher/TeacherNotifications";
+import TeacherStatistics from "./pages/teacher/TeacherStatistics";
+
+// Student Quiz pages
+import StudentQuizzes from "./pages/student/StudentQuizzes";
+import TakeQuiz from "./pages/student/TakeQuiz";
+
+// Admin pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
+// Shared pages
+import CoursesList from "./pages/shared/CoursesList";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,6 +50,7 @@ function App() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
+
     if (storedUser && token) {
       try {
         setUser(JSON.parse(storedUser));
@@ -35,23 +63,15 @@ function App() {
     setLoading(false);
   }, []);
 
-  // Fonction de déconnexion centralisée
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    // On ne redirige plus vers "/" mais on laisse React Router gérer
   };
 
   if (loading) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
-        height: "100vh", 
-        fontSize: "1.5rem" 
-      }}>
+      <div className="flex items-center justify-center min-h-screen text-2xl font-medium text-gray-600">
         Chargement...
       </div>
     );
@@ -60,26 +80,55 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {/* BARRE VIOLETTE SUPPRIMÉE → propre et moderne ! */}
-
         <Routes>
-          {/* Accueil */}
+          {/* Page d'accueil */}
           <Route
             path="/"
-            element={user ? <Navigate to={`/${user.role}`} replace /> : <LandingPage />}
-          />
-<Route path="/profile" element={<TeacherProfile />} />
-          {/* Login */}
-          <Route
-            path="/login"
-            element={user ? <Navigate to={`/${user.role}`} replace /> : <LoginPage setUser={setUser} />}
+            element={
+              user ? <Navigate to={`/${user.role}`} replace /> : <LandingPage />
+            }
           />
 
-          {/* Dashboards protégés + on passe handleLogout */}
+          {/* LOGIN */}
+          <Route
+            path="/login"
+            element={
+              user ? (
+                <Navigate to={`/${user.role}`} replace />
+              ) : (
+                <LoginPage setUser={setUser} />
+              )
+            }
+          />
+
+          {/* ==================== PROFILS (routes séparées) ==================== */}
+          <Route
+            path="/profile/student"
+            element={
+              user?.role === "etudiant" || user?.role === "étudiant" ? (
+                <StudentProfile />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/profile/teacher"
+            element={
+              user?.role === "enseignant" || user?.role === "enseignant" ? (
+                <TeacherProfile />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* ==================== DASHBOARDS ==================== */}
           <Route
             path="/etudiant"
             element={
-              user?.role === "etudiant" ? (
+              user?.role === "etudiant" || user?.role === "étudiant" ? (
                 <StudentDashboard handleLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" replace />
@@ -90,8 +139,231 @@ function App() {
           <Route
             path="/enseignant"
             element={
-              user?.role === "enseignant" ? (
+              user?.role === "enseignant" || user?.role === "teacher" ? (
                 <TeacherDashboard handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/enseignant/dashboard"
+            element={
+              user?.role === "enseignant" || user?.role === "teacher" ? (
+                <TeacherDashboard handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/teacher-dashboard"
+            element={
+              user?.role === "enseignant" || user?.role === "teacher" ? (
+                <TeacherDashboard handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/student-dashboard"
+            element={
+              user?.role === "etudiant" || user?.role === "student" ? (
+                <StudentDashboard handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/enseignant/courses"
+            element={
+              user?.role === "enseignant" || user?.role === "enseignant" ? (
+                <CoursesList handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route path="/courses" element={<CoursesList />} />
+
+          {/* Détail d'un cours enseignant */}
+          <Route
+            path="/enseignant/course/:id"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherCourseDetail />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Page devoirs enseignant (maintenant quiz) */}
+          <Route
+            path="/enseignant/assignments"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherAssignments />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Routes Quiz Enseignant */}
+          <Route
+            path="/enseignant/quiz"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherAssignments />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/enseignant/quiz/create"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <CreateQuiz />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/enseignant/quiz/:id"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <QuizResults />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Routes Quiz Étudiant */}
+          <Route
+            path="/etudiant/quiz"
+            element={
+              user?.role === "etudiant" || user?.role === "étudiant" ? (
+                <StudentQuizzes />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/etudiant/quiz/:id"
+            element={
+              user?.role === "etudiant" || user?.role === "étudiant" ? (
+                <TakeQuiz />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Créer un devoir */}
+          <Route
+            path="/enseignant/assignments/create"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherAssignmentCreate />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Détail d'un devoir */}
+          <Route
+            path="/enseignant/assignments/:id"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherAssignmentDetail />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Planning enseignant */}
+          <Route
+            path="/enseignant/planning"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherPlanning />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Questions étudiants */}
+          <Route
+            path="/enseignant/questions"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherQuestions />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Ressources enseignant */}
+          <Route
+            path="/enseignant/resources"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherResources />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Messagerie enseignant */}
+          <Route
+            path="/enseignant/messaging"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherMessaging handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Notifications enseignant */}
+          <Route
+            path="/enseignant/notifications"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherNotifications />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Statistiques enseignant */}
+          <Route
+            path="/enseignant/statistics"
+            element={
+              user?.role === "enseignant" || user?.role === "admin" ? (
+                <TeacherStatistics handleLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -113,17 +385,13 @@ function App() {
           <Route path="/forget-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
-<Route 
-          path="/admin" 
-          element={<AdminDashboard handleLogout={handleLogout} />} 
-        />
+
           {/* 404 */}
           <Route
             path="*"
             element={<Navigate to={user ? `/${user.role}` : "/"} replace />}
           />
         </Routes>
-        
       </div>
     </Router>
   );

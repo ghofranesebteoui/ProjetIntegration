@@ -1,0 +1,186 @@
+/* ===================================
+   STUDENT DASHBOARD - STYLES SPÉCIFIQUES
+=================================== */
+
+/* Import des styles de base */
+@import '../dashboard-base.css';
+
+/* Font family pour le dashboard étudiant */
+.student-dashboard-wrapper {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Couleurs spécifiques étudiant */
+:root {
+  --student-primary: #7c3aed;
+  --student-primary-dark: #6d28d9;
+  --student-primary-darker: #5b21b6;
+  --student-gradient: linear-gradient(135deg, #7c3aed, #5b21b6);
+}
+
+/* Override des couleurs pour l'étudiant */
+.student-dashboard-wrapper .student-primary-btn,
+.student-dashboard-wrapper .modal-btn-save,
+.student-dashboard-wrapper .modal-video-btn,
+.student-dashboard-wrapper .course-card-icon,
+.student-dashboard-wrapper .edunova-icon,
+.student-dashboard-wrapper .header-user-avatar,
+.student-dashboard-wrapper .sidebar-nav-item.active,
+.student-dashboard-wrapper .event-type-badge,
+.student-dashboard-wrapper .sidebar-title-icon {
+  background: var(--student-gradient) !important;
+  color: white !important;
+}
+
+.student-dashboard-wrapper .student-primary-btn:hover,
+.student-dashboard-wrapper .modal-btn-save:hover,
+.student-dashboard-wrapper .modal-video-btn:hover {
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.student-dashboard-wrapper .stat-card-icon,
+.student-dashboard-wrapper .student-highlight-card .stat-card-icon {
+  color: var(--student-primary-dark) !important;
+}
+
+.student-dashboard-wrapper .student-stat-card:hover,
+.student-dashboard-wrapper .student-course-card:hover {
+  border-color: var(--student-primary-dark) !important;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.2) !important;
+}
+
+.student-dashboard-wrapper .header-notification-badge {
+  background: var(--student-gradient) !important;
+}
+
+/* Styles spécifiques pour les cartes de statistiques étudiant */
+.student-dashboard-wrapper .student-highlight-card {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border-color: #ff9800;
+}
+
+.student-dashboard-wrapper .student-highlight-card .stat-card-icon {
+  color: #ff9800 !important;
+}
+
+/* Boutons d'action spécifiques étudiant */
+.student-dashboard-wrapper .course-btn1,
+.student-dashboard-wrapper .course-btn2 {
+  background: var(--student-gradient);
+}
+
+.student-dashboard-wrapper .course-btn1:hover,
+.student-dashboard-wrapper .course-btn2:hover {
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+}
+
+/* Avatar et profil étudiant */
+.student-dashboard-wrapper .message-item-avatar-icon {
+  background: var(--student-primary-dark);
+}
+
+.student-dashboard-wrapper .profile-dropdown-avatar {
+  background: var(--student-gradient);
+}
+
+/* Rôle étudiant dans le profil */
+.student-profile-wrapper .role {
+  color: #5b21b6 !important;
+  font-weight: 600;
+}
+
+.student-profile-wrapper .role::before {
+  content: "Étudiant";
+  font-weight: bold;
+  color: #7c3aed;
+  margin-right: 8px;
+}
+
+/* Événements spécifiques étudiant */
+.student-dashboard-wrapper .event-type-badge.exam {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.student-dashboard-wrapper .event-type-badge.assignment {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.student-dashboard-wrapper .event-type-badge.lab {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Progression des cours - couleur étudiant */
+.student-dashboard-wrapper .course-progress-fill {
+  background: var(--student-gradient);
+}
+
+.student-dashboard-wrapper .course-card-progress-circle circle:nth-child(2) {
+  stroke: var(--student-primary);
+}
+
+.student-dashboard-wrapper .progress-circle-text {
+  color: var(--student-primary-dark);
+}
+
+/* Hover effects spécifiques */
+.student-dashboard-wrapper .sidebar-nav-item:hover {
+  background: #f8f5fb;
+  color: var(--student-primary-dark);
+}
+
+.student-dashboard-wrapper .menu-toggle-btn:hover {
+  background: var(--student-primary-dark);
+  color: white;
+}
+
+.student-dashboard-wrapper .header-icon-btn:hover {
+  color: var(--student-primary-dark);
+}
+
+.student-dashboard-wrapper .profile-dropdown-item:hover {
+  color: var(--student-primary-dark);
+}
+
+/* Focus states pour les inputs */
+.student-dashboard-wrapper .modal-input:focus,
+.student-dashboard-wrapper .modal-textarea:focus {
+  border-color: var(--student-primary-dark);
+  background: #f9f5ff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+/* Dropzone */
+.student-dashboard-wrapper .modal-dropzone {
+  border-color: var(--student-primary);
+  background: linear-gradient(135deg, #f9f5ff 0%, #faf5ff 100%);
+}
+
+.student-dashboard-wrapper .modal-dropzone:hover {
+  border-color: var(--student-primary-darker);
+  background: linear-gradient(135deg, #f3e8ff 0%, #f5f3ff 100%);
+}
+
+.student-dashboard-wrapper .modal-dropzone-icon {
+  color: var(--student-primary);
+}
+
+/* Activités récentes - icônes */
+.student-dashboard-wrapper .activity-item-icon {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  color: #4f46e5;
+}
+
+.student-dashboard-wrapper .student-event-item:hover {
+  background: #f0e8ff;
+}
+
+/* Titre des sections */
+.student-dashboard-wrapper .content-card-title::before {
+  background: var(--student-gradient);
+}
+
+.student-dashboard-wrapper .sidebar-title-icon {
+  color: var(--student-primary-dark);
+  background: #f3e8ff;
+}

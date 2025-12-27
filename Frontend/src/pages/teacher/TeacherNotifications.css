@@ -1,0 +1,159 @@
+.filter-btn {
+  padding: 0.65rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.filter-btn:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
+  background: #f3e8ff;
+}
+
+.filter-btn.active {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+}
+
+.notifications-full-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notification-full-item {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+  border-left: 4px solid transparent;
+}
+
+.notification-full-item:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.notification-full-item.unread {
+  background: #f3e8ff;
+  border-left-color: #7c3aed;
+}
+
+.notification-full-content {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+.notif-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.notif-icon.success {
+  color: #10b981;
+}
+
+.notif-icon.warning {
+  color: #f59e0b;
+}
+
+.notif-icon.info {
+  color: #3b82f6;
+}
+
+.notification-full-text {
+  flex: 1;
+}
+
+.notification-full-text h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.notification-full-text p {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.notification-full-time {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.notification-full-time svg {
+  font-size: 1rem;
+}
+
+.notification-full-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.notif-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1.2rem;
+}
+
+.mark-read-btn {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.mark-read-btn:hover {
+  background: #10b981;
+  color: white;
+  transform: scale(1.1);
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .notification-full-item {
+    flex-direction: column;
+  }
+
+  .notification-full-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

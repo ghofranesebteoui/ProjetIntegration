@@ -1,12 +1,18 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const path = require("path");
 
-const db = require('./src/config/db');
-const authRoutes = require('./src/modules/auth/auth.routes');
-
+const db = require("./src/config/db");
+const authRoutes = require("./src/modules/auth/auth.routes");
+const courseRoutes = require("./src/modules/course/course.routes");
+const profileRoutes = require("./src/modules/profile/profile.routes");
+const assignmentRoutes = require("./src/modules/assignment/assignment.routes");
+const studentRoutes = require("./src/modules/student/student.routes");
+const messagingRoutes = require("./src/modules/messaging/messaging.routes");
+const notificationsRoutes = require("./src/modules/notifications/notifications.routes");
 const app = express();
 
 /* -------------------------------------------------
@@ -14,46 +20,75 @@ const app = express();
    ------------------------------------------------- */
 (async () => {
   try {
-    await db.testConnection();               // <-- async!
+    await db.testConnection();
   } catch (err) {
-    console.error('DB connection failed – exiting');
+    console.error("DB connection failed – exiting");
     process.exit(1);
   }
 
   /* -------------------------------------------------
      2. Middleware (order matters)
      ------------------------------------------------- */
-  app.use(helmet());
-app.use(cors({
-  origin: 'http://localhost:3000', // URL de votre frontend
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
-  next();
-});
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(morgan('dev'));
+  app.use(
+    helmet({
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", "data:", "blob:"],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'"],
+          objectSrc: ["'none'"],
+          mediaSrc: ["'self'", "blob:"],
+          frameSrc: ["'self'"],
+        },
+      },
+    })
+  );
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    })
+  );
+  app.use((req, res, next) => {
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+    next();
+  });
+  app.use(express.json({ limit: "500mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "500mb" }));
+  app.use(morgan("dev"));
 
   /* -------------------------------------------------
      3. Health check
      ------------------------------------------------- */
-  app.get('/health', (req, res) => {
+  app.get("/health", (req, res) => {
     res.json({
       success: true,
-      message: 'Server is running',
+      message: "Server is running",
       timestamp: new Date().toISOString(),
     });
   });
 
   /* -------------------------------------------------
-     4. API routes
+     4. API routes - ✅ AVANT le middleware 404
      ------------------------------------------------- */
-  app.use('/api/auth', authRoutes);
+  app.use("/api/auth", authRoutes);
+  app.use("/api/courses", courseRoutes);
+  app.use("/api/profile", profileRoutes);
+  app.use("/api/assignments", assignmentRoutes);
+  app.use("/api/student", studentRoutes);
+  app.use("/api/messaging", messagingRoutes);
+  app.use("/api/notifications", notificationsRoutes);
+
+  // Servir les fichiers uploadés
+  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
   /* -------------------------------------------------
      5. 404 – must be *after* all routes
@@ -61,7 +96,7 @@ app.use((req, res, next) => {
   app.use((req, res) => {
     res.status(404).json({
       success: false,
-      message: 'Route not found',
+      message: "Route not found",
     });
   });
 
@@ -69,12 +104,12 @@ app.use((req, res, next) => {
      6. Global error handler – **must have 4 args**
      ------------------------------------------------- */
   app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err);
+    console.error("Unhandled error:", err);
 
     res.status(err.status || 500).json({
       success: false,
-      message: err.message || 'Internal server error',
-      ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+      message: err.message || "Internal server error",
+      ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
     });
   });
 
@@ -84,7 +119,7 @@ app.use((req, res, next) => {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
     console.log(`Health check: http://localhost:${PORT}/health`);
   });
 })();

@@ -13,10 +13,9 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // ----------------- INSCRIPTION -----------------
-// ----------------- INSCRIPTION -----------------
 const register = async (req, res) => {
   try {
-    console.log("Tentative d'inscription:", req.body.email);
+    console.log("📝 Tentative d'inscription:", req.body.email);
 
     const { email, password, first_name, last_name, role } = req.body;
 
@@ -35,32 +34,32 @@ const register = async (req, res) => {
       });
     }
 
-    // Autoriser le rôle admin (et tout autre rôle)
+    // Autoriser les rôles définis
     const allowedRoles = ['etudiant', 'enseignant', 'admin'];
     const userRole = role && allowedRoles.includes(role) ? role : 'etudiant';
 
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
-      console.log("Email déjà existant:", email);
+      console.log("❌ Email déjà existant:", email);
       return res.status(400).json({
         success: false,
         error: "Un utilisateur avec cet email existe déjà",
       });
     }
 
-    // HASHAGE DU MOT DE PASSE ICI
+    // Hashage du mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       email,
-      password_hash: hashedPassword,  // ON UTILISE password_hash
+      password_hash: hashedPassword,
       first_name,
       last_name,
       role: userRole,
       is_verified: false,
     });
 
-    console.log("Utilisateur créé:", user.id, "Rôle:", user.role);
+    console.log("✅ Utilisateur créé:", user.id, "| Rôle:", user.role);
 
     const verificationToken = generateVerificationToken();
     await user.saveVerificationToken(verificationToken);
@@ -78,7 +77,7 @@ const register = async (req, res) => {
             </div>`,
     });
 
-    console.log("Email de vérification envoyé à:", user.email);
+    console.log("📧 Email de vérification envoyé à:", user.email);
 
     res.status(201).json({
       success: true,
@@ -86,7 +85,7 @@ const register = async (req, res) => {
       data: { user: user.toJSON() },
     });
   } catch (error) {
-    console.error("Erreur inscription:", error);
+    console.error("❌ Erreur inscription:", error);
     res.status(500).json({
       success: false,
       error: "Erreur lors de l'inscription",
@@ -234,16 +233,24 @@ const login = async (req, res) => {
       });
     }
 
-    const token = generateToken(user.id);
+    // ✅ GÉNÉRATION DU TOKEN AVEC LES 3 PARAMÈTRES
+    const token = generateToken(user.id, user.email, user.role);
     await user.updateLastLogin();
 
     console.log("✅ Connexion réussie pour:", user.email);
+    console.log("🎭 Rôle:", user.role);
+    console.log("🎫 Token généré avec role inclus");
 
+    // ✅ FORMAT DE RÉPONSE CORRIGÉ
     res.status(200).json({
       success: true,
-      data: {
-        token,
-        user: user.toJSON(),
+      token, // Token directement accessible
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -258,7 +265,7 @@ const login = async (req, res) => {
 // ----------------- LOGIN GOOGLE -----------------
 const googleLogin = async (req, res) => {
   try {
-    console.log("🔵 Tentative connexion Google:", req.body);
+    console.log("🔵 Tentative connexion Google:", req.body.email);
 
     const { email, first_name, last_name, uid } = req.body;
 
@@ -270,45 +277,45 @@ const googleLogin = async (req, res) => {
       });
     }
 
-    // Chercher l'utilisateur
     let user = await User.findByEmail(email);
 
     if (!user) {
-      // Créer un nouvel utilisateur Google
       console.log("🆕 Création nouvel utilisateur Google:", email);
 
       user = await User.create({
         email,
         first_name: first_name || "Utilisateur",
         last_name: last_name || "Google",
-        password: "google_" + uid, // Mot de passe unique basé sur UID Firebase
+        password_hash: await bcrypt.hash("google_" + uid, 10),
         role: "etudiant",
+        is_verified: true, // Auto-vérifier les comptes Google
       });
 
-      // Vérifier automatiquement l'email pour les comptes Google
-      await user.verify();
-      console.log("✅ Utilisateur Google créé et vérifié:", user.id);
+      console.log("✅ Utilisateur Google créé:", user.id);
     } else {
       console.log("✅ Utilisateur Google existant trouvé:", user.id);
 
-      // Si l'utilisateur existe mais n'est pas vérifié, le vérifier automatiquement
       if (!user.is_verified) {
         await user.verify();
-        console.log("✅ Email vérifié automatiquement pour compte Google");
+        console.log("✅ Email vérifié automatiquement");
       }
     }
 
-    // Générer le token JWT
-    const token = generateToken(user.id);
+    // ✅ GÉNÉRATION DU TOKEN AVEC LES 3 PARAMÈTRES
+    const token = generateToken(user.id, user.email, user.role);
     await user.updateLastLogin();
 
-    console.log("✅ Connexion Google réussie, token généré");
+    console.log("✅ Connexion Google réussie");
 
     res.status(200).json({
       success: true,
-      data: {
-        token,
-        user: user.toJSON(),
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -335,9 +342,15 @@ const resetPassword = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ userId: user.id, email }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: "24h" }
+    );
 
     await user.saveResetToken(token);
 
@@ -368,6 +381,7 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// ----------------- RESET PASSWORD WITH TOKEN -----------------
 const resetPasswordWithToken = async (req, res) => {
   try {
     console.log("🔑 Réinitialisation avec token");
@@ -386,7 +400,7 @@ const resetPasswordWithToken = async (req, res) => {
 
     const [users] = await pool.query(
       "SELECT * FROM users WHERE id = ? AND reset_password_token = ? AND reset_password_expires > ?",
-      [decoded.userId, token, new Date()]
+      [decoded.id, token, new Date()]
     );
 
     const user = users[0];

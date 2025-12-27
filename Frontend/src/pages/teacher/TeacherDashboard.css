@@ -1,0 +1,962 @@
+/* ===================================
+   TEACHER DASHBOARD - STYLES SPÉCIFIQUES
+=================================== */
+
+/* Import des styles de base */
+@import '../dashboard-base.css';
+
+/* Font family pour le dashboard enseignant */
+.teacher-dashboard-wrapper {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Couleurs spécifiques enseignant */
+:root {
+  --teacher-primary: #7c3aed;
+  --teacher-primary-dark: #6d28d9;
+  --teacher-primary-darker: #5b21b6;
+  --teacher-gradient: linear-gradient(135deg, #7c3aed, #5b21b6);
+}
+
+/* Override des couleurs pour l'enseignant */
+.teacher-dashboard-wrapper .student-primary-btn,
+.teacher-dashboard-wrapper .modal-btn-save,
+.teacher-dashboard-wrapper .modal-video-btn,
+.teacher-dashboard-wrapper .course-card-icon,
+.teacher-dashboard-wrapper .edunova-icon,
+.teacher-dashboard-wrapper .header-user-avatar,
+.teacher-dashboard-wrapper .sidebar-nav-item.active,
+.teacher-dashboard-wrapper .event-type-badge,
+.teacher-dashboard-wrapper .sidebar-title-icon {
+  background: var(--teacher-gradient) !important;
+  color: white !important;
+}
+
+.teacher-dashboard-wrapper .student-primary-btn:hover,
+.teacher-dashboard-wrapper .modal-btn-save:hover,
+.teacher-dashboard-wrapper .modal-video-btn:hover {
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.teacher-dashboard-wrapper .stat-card-icon,
+.teacher-dashboard-wrapper .student-highlight-card .stat-card-icon {
+  color: var(--teacher-primary-dark) !important;
+}
+
+.teacher-dashboard-wrapper .student-stat-card:hover,
+.teacher-dashboard-wrapper .student-course-card:hover {
+  border-color: var(--teacher-primary-dark) !important;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.2) !important;
+}
+
+.teacher-dashboard-wrapper .header-notification-badge {
+  background: var(--teacher-gradient) !important;
+}
+
+/* Styles spécifiques pour les cartes de statistiques enseignant */
+.teacher-dashboard-wrapper .student-highlight-card {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  border-color: #7c3aed;
+}
+
+.teacher-dashboard-wrapper .student-highlight-card .stat-card-icon {
+  color: #7c3aed !important;
+}
+
+/* ===================================
+   STATISTIQUES DÉTAILLÉES
+=================================== */
+
+.teacher-stats-section {
+  margin-bottom: 2rem;
+}
+
+.stats-header {
+  margin-bottom: 1.5rem;
+}
+
+.stats-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.stats-title-icon {
+  font-size: 2rem;
+  color: var(--teacher-primary);
+}
+
+.stats-subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.detailed-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.stat-detail-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.stat-detail-card:hover {
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+  border-color: var(--teacher-primary);
+  transform: translateY(-2px);
+}
+
+.stat-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.stat-detail-icon {
+  font-size: 1.75rem;
+  color: var(--teacher-primary);
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+}
+
+.stat-detail-header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.stat-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.stat-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-detail-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.stat-detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--teacher-primary);
+}
+
+.stat-detail-value-large {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--teacher-primary);
+}
+
+.stat-detail-bar {
+  width: 100%;
+  height: 0.5rem;
+  background: #e5e7eb;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-detail-bar-fill {
+  height: 100%;
+  background: var(--teacher-gradient);
+  border-radius: 0.25rem;
+  transition: width 0.6s ease;
+}
+
+/* ===================================
+   RESSOURCES SIDEBAR
+=================================== */
+
+.resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.resource-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.resource-item:hover {
+  background: #f3e8ff;
+  transform: translateX(4px);
+}
+
+.resource-icon {
+  font-size: 1.5rem;
+  color: var(--teacher-primary);
+  background: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+}
+
+.resource-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.resource-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resource-course {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resource-date {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ===================================
+   MESSAGERIE SECTION
+=================================== */
+
+.messaging-section {
+  scroll-margin-top: 100px;
+}
+
+/* Boutons d'action spécifiques enseignant */
+.teacher-dashboard-wrapper .course-btn1,
+.teacher-dashboard-wrapper .course-btn2 {
+  background: var(--teacher-gradient);
+}
+
+.teacher-dashboard-wrapper .course-btn1:hover,
+.teacher-dashboard-wrapper .course-btn2:hover {
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+}
+
+/* Avatar et profil enseignant */
+.teacher-dashboard-wrapper .message-item-avatar-icon {
+  background: var(--teacher-primary-dark);
+}
+
+.teacher-dashboard-wrapper .profile-dropdown-avatar {
+  background: var(--teacher-gradient);
+}
+
+/* Rôle enseignant dans le profil */
+.teacher-profile-wrapper .role {
+  color: #5b21b6 !important;
+  font-weight: 600;
+}
+
+/* Événements spécifiques enseignant */
+.teacher-dashboard-wrapper .event-type-badge.course {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.teacher-dashboard-wrapper .event-type-badge.meeting {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.teacher-dashboard-wrapper .event-type-badge.grading {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* Progression des cours - couleur enseignant */
+.teacher-dashboard-wrapper .course-progress-fill {
+  background: var(--teacher-gradient);
+}
+
+.teacher-dashboard-wrapper .course-card-progress-circle circle:nth-child(2) {
+  stroke: var(--teacher-primary);
+}
+
+.teacher-dashboard-wrapper .progress-circle-text {
+  color: var(--teacher-primary-dark);
+}
+
+/* Hover effects spécifiques */
+.teacher-dashboard-wrapper .sidebar-nav-item:hover {
+  background: #f3e8ff;
+  color: var(--teacher-primary-dark);
+}
+
+.teacher-dashboard-wrapper .menu-toggle-btn:hover {
+  background: var(--teacher-primary-dark);
+  color: white;
+}
+
+.teacher-dashboard-wrapper .header-icon-btn:hover {
+  color: var(--teacher-primary-dark);
+}
+
+.teacher-dashboard-wrapper .profile-dropdown-item:hover {
+  color: var(--teacher-primary-dark);
+}
+
+/* Focus states pour les inputs */
+.teacher-dashboard-wrapper .modal-input:focus,
+.teacher-dashboard-wrapper .modal-textarea:focus {
+  border-color: var(--teacher-primary-dark);
+  background: #faf5ff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+/* Dropzone */
+.teacher-dashboard-wrapper .modal-dropzone {
+  border-color: var(--teacher-primary);
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+}
+
+.teacher-dashboard-wrapper .modal-dropzone:hover {
+  border-color: var(--teacher-primary-darker);
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+}
+
+.teacher-dashboard-wrapper .modal-dropzone-icon {
+  color: var(--teacher-primary);
+}
+
+/* Activités récentes - icônes */
+.teacher-dashboard-wrapper .activity-item-icon {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  color: #6d28d9;
+}
+
+.teacher-dashboard-wrapper .student-event-item:hover {
+  background: #faf5ff;
+}
+
+/* Titre des sections */
+.teacher-dashboard-wrapper .content-card-title::before {
+  background: var(--teacher-gradient);
+}
+
+.teacher-dashboard-wrapper .sidebar-title-icon {
+  color: var(--teacher-primary-dark);
+  background: #f3e8ff;
+}
+
+/* Boutons d'édition et suppression de cours */
+.teacher-dashboard-wrapper .course-edit-btn {
+  color: #7c3aed;
+  border-color: #f3e8ff;
+}
+
+.teacher-dashboard-wrapper .course-edit-btn:hover {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  border-color: #7c3aed;
+}
+
+.teacher-dashboard-wrapper .course-delete-btn {
+  color: #ef4444;
+  border-color: #fee2e2;
+}
+
+.teacher-dashboard-wrapper .course-delete-btn:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #ef4444;
+}
+
+/* ===================================
+   MODAL PLANIFICATION - STYLES
+=================================== */
+
+/* Amélioration des champs de formulaire avec erreurs */
+.modal-input.border-red-500,
+.modal-textarea.border-red-500 {
+  border: 2px solid #ef4444 !important;
+  background-color: #fef2f2;
+}
+
+.modal-input.border-red-500:focus,
+.modal-textarea.border-red-500:focus {
+  outline: none;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Messages d'erreur */
+.text-red-500 {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Compteur de caractères */
+.text-gray-500.text-xs {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Style pour les champs datetime-local */
+.modal-input[type="datetime-local"] {
+  padding: 0.75rem;
+  font-size: 0.95rem;
+}
+
+/* Style pour les champs number */
+.modal-input[type="number"] {
+  padding: 0.75rem;
+}
+
+/* Amélioration du select */
+.modal-input select,
+.modal-input option {
+  cursor: pointer;
+}
+
+/* Hover sur les événements avec bouton de suppression */
+.student-event-item.group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.student-event-item.group:hover {
+  background-color: #f9fafb;
+  padding-right: 2.5rem;
+}
+
+/* Bouton de suppression dans les événements */
+.student-event-item.group button {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.student-event-item.group button:hover {
+  background-color: #fee2e2;
+}
+
+/* Flex pour le contenu de l'événement */
+.event-item-content.flex-1 {
+  flex: 1;
+}
+
+/* Amélioration du header avec bouton */
+.flex.justify-between.items-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Icône dans le bouton */
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+/* Responsive pour le modal de planning */
+@media (max-width: 768px) {
+  .modal-form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .modal-input,
+  .modal-textarea {
+    font-size: 16px; /* Évite le zoom sur mobile */
+  }
+}
+
+/* Animation pour les erreurs */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.modal-input.border-red-500,
+.modal-textarea.border-red-500 {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Style pour les badges de type de session */
+.event-type-badge.lecture {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+}
+
+.event-type-badge.lab {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.event-type-badge.exam {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+
+.event-type-badge.office_hours {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+/* ===================================
+   MODAL PLANIFICATION - STYLES
+=================================== */
+
+/* Amélioration des champs de formulaire avec erreurs */
+.modal-input.border-red-500,
+.modal-textarea.border-red-500 {
+  border: 2px solid #ef4444 !important;
+  background-color: #fef2f2;
+}
+
+.modal-input.border-red-500:focus,
+.modal-textarea.border-red-500:focus {
+  outline: none;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Messages d'erreur */
+.text-red-500 {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Compteur de caractères */
+.text-gray-500.text-xs {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Style pour les champs datetime-local */
+.modal-input[type="datetime-local"] {
+  padding: 0.75rem;
+  font-size: 0.95rem;
+}
+
+/* Style pour les champs number */
+.modal-input[type="number"] {
+  padding: 0.75rem;
+}
+
+/* Amélioration du select */
+.modal-input select,
+.modal-input option {
+  cursor: pointer;
+}
+
+/* Hover sur les événements avec bouton de suppression */
+.student-event-item.group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.student-event-item.group:hover {
+  background-color: #f9fafb;
+  padding-right: 2.5rem;
+}
+
+/* Bouton de suppression dans les événements */
+.student-event-item.group button {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.student-event-item.group button:hover {
+  background-color: #fee2e2;
+}
+
+/* Flex pour le contenu de l'événement */
+.event-item-content.flex-1 {
+  flex: 1;
+}
+
+/* Amélioration du header avec bouton */
+.flex.justify-between.items-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Icône dans le bouton */
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+/* Responsive pour le modal de planning */
+@media (max-width: 768px) {
+  .modal-form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .modal-input,
+  .modal-textarea {
+    font-size: 16px; /* Évite le zoom sur mobile */
+  }
+  
+  .detailed-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animation pour les erreurs */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.modal-input.border-red-500,
+.modal-textarea.border-red-500 {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Style pour les badges de type de session */
+.event-type-badge.lecture {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+}
+
+.event-type-badge.lab {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.event-type-badge.exam {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+
+.event-type-badge.office_hours {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-purple-600 {
+  color: #7c3aed;
+}
+
+.hover\:underline:hover {
+  text-decoration: underline;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+.hover\:text-red-700:hover {
+  color: #b91c1c;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+/* ===================================
+   SIDEBAR RESSOURCES
+=================================== */
+
+.sidebar-resources-section {
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.sidebar-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-title-icon-inline {
+  font-size: 1rem;
+  color: var(--teacher-primary);
+}
+
+.sidebar-loading {
+  text-align: center;
+  padding: 1rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.sidebar-empty {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+}
+
+.sidebar-empty-icon {
+  font-size: 2rem;
+  color: #d1d5db;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-empty p {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.sidebar-resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-resource-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.sidebar-resource-item:hover {
+  background: #f3e8ff;
+  transform: translateX(4px);
+}
+
+.sidebar-resource-icon {
+  font-size: 1.25rem;
+  color: var(--teacher-primary);
+  background: white;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.sidebar-resource-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-resource-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-resource-course {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-view-all-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--teacher-primary);
+  color: var(--teacher-primary);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-view-all-btn:hover {
+  background: var(--teacher-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* Scrollbar pour la section ressources */
+.sidebar-resources-section::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-resources-section::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 2px;
+}
+
+.sidebar-resources-section::-webkit-scrollbar-thumb {
+  background: var(--teacher-primary);
+  border-radius: 2px;
+}
+
+.sidebar-resources-section::-webkit-scrollbar-thumb:hover {
+  background: var(--teacher-primary-dark);
+}
+
+/* Responsive pour le sidebar */
+@media (max-width: 768px) {
+  .sidebar-resources-section {
+    max-height: 300px;
+  }
+  
+  .sidebar-resource-item {
+    padding: 0.5rem;
+  }
+  
+  .sidebar-resource-title {
+    font-size: 0.75rem;
+  }
+  
+  .sidebar-resource-course {
+    font-size: 0.65rem;
+  }
+}

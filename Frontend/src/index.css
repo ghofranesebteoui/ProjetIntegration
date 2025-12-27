@@ -1,0 +1,22 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html, div, span, p, h1, h2, h3, h4, h5, h6, a, button, input, textarea, select {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: s"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

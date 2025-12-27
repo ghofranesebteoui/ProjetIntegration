@@ -1,0 +1,200 @@
+/* ===================================
+   ADMIN DASHBOARD - STYLES SPÉCIFIQUES
+=================================== */
+
+/* Import des styles de base */
+@import '../dashboard-base.css';
+
+/* Font family pour le dashboard admin */
+.admin-dashboard-wrapper {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Couleurs spécifiques admin */
+:root {
+  --admin-primary: #10b981;
+  --admin-primary-dark: #059669;
+  --admin-primary-darker: #047857;
+  --admin-gradient: linear-gradient(135deg, #10b981, #047857);
+}
+
+/* Override des couleurs pour l'admin */
+.admin-dashboard-wrapper .student-primary-btn,
+.admin-dashboard-wrapper .modal-btn-save,
+.admin-dashboard-wrapper .modal-video-btn,
+.admin-dashboard-wrapper .course-card-icon,
+.admin-dashboard-wrapper .edunova-icon,
+.admin-dashboard-wrapper .header-user-avatar,
+.admin-dashboard-wrapper .sidebar-nav-item.active,
+.admin-dashboard-wrapper .event-type-badge,
+.admin-dashboard-wrapper .sidebar-title-icon {
+  background: var(--admin-gradient) !important;
+  color: white !important;
+}
+
+.admin-dashboard-wrapper .student-primary-btn:hover,
+.admin-dashboard-wrapper .modal-btn-save:hover,
+.admin-dashboard-wrapper .modal-video-btn:hover {
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.admin-dashboard-wrapper .stat-card-icon,
+.admin-dashboard-wrapper .student-highlight-card .stat-card-icon {
+  color: var(--admin-primary-dark) !important;
+}
+
+.admin-dashboard-wrapper .student-stat-card:hover,
+.admin-dashboard-wrapper .student-course-card:hover {
+  border-color: var(--admin-primary-dark) !important;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2) !important;
+}
+
+.admin-dashboard-wrapper .header-notification-badge {
+  background: var(--admin-gradient) !important;
+}
+
+/* Styles spécifiques pour les cartes de statistiques admin */
+.admin-dashboard-wrapper .student-highlight-card {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #10b981;
+}
+
+.admin-dashboard-wrapper .student-highlight-card .stat-card-icon {
+  color: #10b981 !important;
+}
+
+/* Boutons d'action spécifiques admin */
+.admin-dashboard-wrapper .course-btn1,
+.admin-dashboard-wrapper .course-btn2 {
+  background: var(--admin-gradient);
+}
+
+.admin-dashboard-wrapper .course-btn1:hover,
+.admin-dashboard-wrapper .course-btn2:hover {
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+/* Avatar et profil admin */
+.admin-dashboard-wrapper .message-item-avatar-icon {
+  background: var(--admin-primary-dark);
+}
+
+.admin-dashboard-wrapper .profile-dropdown-avatar {
+  background: var(--admin-gradient);
+}
+
+/* Rôle admin dans le profil */
+.admin-profile-wrapper .role {
+  color: #047857 !important;
+  font-weight: 600;
+}
+
+/* Événements spécifiques admin */
+.admin-dashboard-wrapper .event-type-badge.system {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.admin-dashboard-wrapper .event-type-badge.user {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.admin-dashboard-wrapper .event-type-badge.alert {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Progression des cours - couleur admin */
+.admin-dashboard-wrapper .course-progress-fill {
+  background: var(--admin-gradient);
+}
+
+.admin-dashboard-wrapper .course-card-progress-circle circle:nth-child(2) {
+  stroke: var(--admin-primary);
+}
+
+.admin-dashboard-wrapper .progress-circle-text {
+  color: var(--admin-primary-dark);
+}
+
+/* Hover effects spécifiques */
+.admin-dashboard-wrapper .sidebar-nav-item:hover {
+  background: #d1fae5;
+  color: var(--admin-primary-dark);
+}
+
+.admin-dashboard-wrapper .menu-toggle-btn:hover {
+  background: var(--admin-primary-dark);
+  color: white;
+}
+
+.admin-dashboard-wrapper .header-icon-btn:hover {
+  color: var(--admin-primary-dark);
+}
+
+.admin-dashboard-wrapper .profile-dropdown-item:hover {
+  color: var(--admin-primary-dark);
+}
+
+/* Focus states pour les inputs */
+.admin-dashboard-wrapper .modal-input:focus,
+.admin-dashboard-wrapper .modal-textarea:focus {
+  border-color: var(--admin-primary-dark);
+  background: #ecfdf5;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* Dropzone */
+.admin-dashboard-wrapper .modal-dropzone {
+  border-color: var(--admin-primary);
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.admin-dashboard-wrapper .modal-dropzone:hover {
+  border-color: var(--admin-primary-darker);
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.admin-dashboard-wrapper .modal-dropzone-icon {
+  color: var(--admin-primary);
+}
+
+/* Activités récentes - icônes */
+.admin-dashboard-wrapper .activity-item-icon {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #059669;
+}
+
+.admin-dashboard-wrapper .student-event-item:hover {
+  background: #ecfdf5;
+}
+
+/* Titre des sections */
+.admin-dashboard-wrapper .content-card-title::before {
+  background: var(--admin-gradient);
+}
+
+.admin-dashboard-wrapper .sidebar-title-icon {
+  color: var(--admin-primary-dark);
+  background: #d1fae5;
+}
+
+/* Boutons d'édition et suppression */
+.admin-dashboard-wrapper .course-edit-btn {
+  color: #10b981;
+  border-color: #d1fae5;
+}
+
+.admin-dashboard-wrapper .course-edit-btn:hover {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #10b981;
+}
+
+.admin-dashboard-wrapper .course-delete-btn {
+  color: #ef4444;
+  border-color: #fee2e2;
+}
+
+.admin-dashboard-wrapper .course-delete-btn:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #ef4444;
+}
